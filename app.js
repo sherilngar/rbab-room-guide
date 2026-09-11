@@ -260,52 +260,14 @@ function attachRoomEvents(tile, roomNum) {
 /* ================= Building overview (all buildings, modal) ================= */
 /* ================= Resort Map (schematic placeholder) ================= */
 function openResortMap() {
-  const svg = `
-    <svg viewBox="0 0 760 440" style="width:100%; height:auto; display:block; border-radius:8px;">
-      <defs>
-        <pattern id="rmGrid" width="22" height="22" patternUnits="userSpaceOnUse">
-          <path d="M22 0H0V22" fill="none" stroke="var(--line)" stroke-width="1"/>
-        </pattern>
-      </defs>
-      <rect x="0.5" y="0.5" width="759" height="439" fill="var(--panel)" stroke="var(--line)"/>
-      <rect x="0.5" y="0.5" width="759" height="439" fill="url(#rmGrid)"/>
-
-      <rect x="0" y="0" width="760" height="86" fill="#3d6fa8" opacity="0.3"/>
-      <text x="20" y="28" font-size="12" font-weight="700" letter-spacing="1" fill="var(--ink-soft)">SEA</text>
-
-      <ellipse cx="380" cy="255" rx="95" ry="48" fill="#3d6fa8" opacity="0.22" stroke="#3d6fa8" stroke-width="1.5"/>
-      <text x="380" y="259" font-size="12" font-weight="700" fill="var(--ink-soft)" text-anchor="middle">Main Pool Area</text>
-
-      <g class="rm-building" data-b="amwaj" style="cursor:pointer">
-        <rect x="55" y="115" width="180" height="110" rx="10" fill="var(--c-kga)" opacity="0.85"/>
-        <text x="145" y="163" font-size="15" font-weight="700" fill="#fff" text-anchor="middle">Amwaj</text>
-        <text x="145" y="182" font-size="10" fill="#fff" opacity="0.85" text-anchor="middle">Beachfront</text>
-      </g>
-      <g class="rm-building" data-b="marmar" style="cursor:pointer">
-        <rect x="295" y="335" width="180" height="90" rx="10" fill="var(--c-skb)" opacity="0.9"/>
-        <text x="385" y="378" font-size="15" font-weight="700" fill="#fff" text-anchor="middle">Marmar</text>
-        <text x="385" y="396" font-size="10" fill="#fff" opacity="0.85" text-anchor="middle">Poolside</text>
-      </g>
-      <g class="rm-building" data-b="zumroud" style="cursor:pointer">
-        <rect x="525" y="135" width="180" height="110" rx="10" fill="var(--c-twa)" opacity="0.85"/>
-        <text x="615" y="183" font-size="15" font-weight="700" fill="#fff" text-anchor="middle">Zumroud</text>
-        <text x="615" y="202" font-size="10" fill="#fff" opacity="0.85" text-anchor="middle">Garden side</text>
-      </g>
-    </svg>
-    <div class="rm-disclaimer">⚠ Placeholder layout for testing only — building positions and proportions are approximate and need to be checked against the official site plan before this goes anywhere near production.</div>`;
-
-  $("#resortMapBody").innerHTML = svg;
-  $$(".rm-building", $("#resortMapBody")).forEach((g) => {
-    const rect = g.querySelector("rect");
-    const baseOpacity = rect.getAttribute("opacity");
-    g.addEventListener("click", () => {
-      closeResortMap();
-      selectBuilding(g.dataset.b);
-    });
-    g.addEventListener("mouseenter", () => rect.setAttribute("opacity", "1"));
-    g.addEventListener("mouseleave", () => rect.setAttribute("opacity", baseOpacity));
-  });
-
+  $("#resortMapBody").innerHTML = `
+    <div class="rm-iframe-wrap">
+      <iframe id="rmIframe" src="https://easymap.ae/rixos-bab-al-bahr/" loading="lazy"></iframe>
+    </div>
+    <div class="rm-fallback" id="rmFallback">
+      If nothing loaded above, EasyMap is blocking embedding (common for these tools) — that means real integration needs them to provide an embed code directly.
+      <a href="https://easymap.ae/rixos-bab-al-bahr/" target="_blank" rel="noopener">Open it in a new tab instead →</a>
+    </div>`;
   $("#resortMapModal").classList.add("show");
 }
 function closeResortMap() { $("#resortMapModal").classList.remove("show"); }
