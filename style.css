@@ -909,6 +909,16 @@ header.topbar {
   padding-bottom: 8px;
   border-bottom: 1px solid var(--line);
 }
+
+.rm-disclaimer {
+  margin-top: 14px;
+  padding: 10px 14px;
+  background: var(--danger-soft);
+  color: var(--danger);
+  border-radius: 10px;
+  font-size: 12px;
+  line-height: 1.5;
+}
 .modal-box h2 {
   font-family: "Source Serif 4", Georgia, serif;
   font-weight: 600;

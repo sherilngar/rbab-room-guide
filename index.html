@@ -42,6 +42,10 @@
       </div>
 
       <div class="header-actions">
+        <button class="text-btn" id="resortMapBtn" title="Resort map">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 20l-6-3V5l6 3m0 12l6-3m-6 3V8m6 9l6 3V7l-6-3m0 15V5m0 0L9 8"/></svg>
+          Resort Map
+        </button>
         <button class="text-btn" id="overviewBtn" title="All-buildings overview">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
           Overview
@@ -146,6 +150,15 @@
       <button class="tour-skip" id="tourSkip">Skip</button>
       <button class="tour-next" id="tourNext">Next</button>
     </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="resortMapModal">
+  <div class="modal-box modal-box-wide">
+    <button class="modal-close" id="resortMapClose">✕</button>
+    <h2>Resort Map</h2>
+    <div class="modal-sub">Schematic layout for orientation — not to scale, pending the official site plan. Click a building to open it.</div>
+    <div id="resortMapBody"></div>
   </div>
 </div>
 
