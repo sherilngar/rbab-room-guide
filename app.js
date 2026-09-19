@@ -9,6 +9,9 @@ const TYPE_COLOR = {
   SKC: "var(--c-skc)", SKD: "var(--c-skd)", SKP: "var(--c-skp)", SXA: "var(--c-sxa)", PI: "var(--c-pi)",
 };
 
+// Pilot data: real room positions extracted from the architectural drawing (Zumroud GF only)
+const ZUMROUD_GF_POSITIONS = {"1001": {"xPct": 41.69, "yPct": 41.09, "confidence": "extracted"}, "1018": {"xPct": 65.28, "yPct": 53.26, "confidence": "extracted"}, "1019": {"xPct": 64.01, "yPct": 53.23, "confidence": "extracted"}, "1020": {"xPct": 61.47, "yPct": 50.83, "confidence": "extracted"}, "1021": {"xPct": 58.39, "yPct": 50.91, "confidence": "extracted"}, "1022": {"xPct": 56.81, "yPct": 50.77, "confidence": "extracted"}, "1023": {"xPct": 53.65, "yPct": 50.79, "confidence": "extracted"}, "1024": {"xPct": 50.17, "yPct": 50.85, "confidence": "extracted"}, "1025": {"xPct": 42.43, "yPct": 59.09, "confidence": "extracted"}, "1026": {"xPct": 42.41, "yPct": 62.7, "confidence": "extracted"}, "1030": {"xPct": 44.73, "yPct": 74.36, "confidence": "extracted"}, "1031": {"xPct": 44.71, "yPct": 73.23, "confidence": "extracted"}, "1036": {"xPct": 41.15, "yPct": 61.44, "confidence": "extracted"}, "1037": {"xPct": 30.91, "yPct": 50.81, "confidence": "extracted"}, "1041": {"xPct": 19.35, "yPct": 53.19, "confidence": "extracted"}, "1042": {"xPct": 18.25, "yPct": 53.19, "confidence": "extracted"}, "1047": {"xPct": 29.73, "yPct": 50.21, "confidence": "extracted"}, "1048": {"xPct": 33.33, "yPct": 50.21, "confidence": "extracted"}, "1051": {"xPct": 38.79, "yPct": 73.19, "confidence": "extracted"}, "1052": {"xPct": 38.79, "yPct": 74.17, "confidence": "extracted"}, "1044": {"xPct": 22.05, "yPct": 50.2, "confidence": "estimated"}, "1045": {"xPct": 24.61, "yPct": 50.2, "confidence": "estimated"}, "1046": {"xPct": 27.16, "yPct": 50.21, "confidence": "estimated"}, "1040": {"xPct": 22.24, "yPct": 52.6, "confidence": "estimated"}, "1039": {"xPct": 25.13, "yPct": 51.99, "confidence": "estimated"}, "1038": {"xPct": 28.02, "yPct": 51.41, "confidence": "estimated"}, "1027": {"xPct": 42.98, "yPct": 65.33, "confidence": "estimated"}, "1028": {"xPct": 43.56, "yPct": 67.96, "confidence": "estimated"}, "1029": {"xPct": 44.15, "yPct": 70.59, "confidence": "estimated"}, "1035": {"xPct": 40.56, "yPct": 64.38, "confidence": "estimated"}, "1034": {"xPct": 39.97, "yPct": 67.3, "confidence": "estimated"}, "1033": {"xPct": 39.37, "yPct": 70.25, "confidence": "estimated"}, "1049": {"xPct": 16.94, "yPct": 48.2, "confidence": "estimated"}, "1050": {"xPct": 17.42, "yPct": 45.75, "confidence": "estimated"}};
+
 const TYPE_DESC = {
   KGA: "Deluxe King Garden", KGAOV: "Deluxe King View", KGE: "Premium King Garden", KGEOV: "Premium King View",
   PI: "Posting Interface", SKA: "Kids Escape Suite", SKB: "Family Room Garden", SKC: "Family Room View",
@@ -193,6 +196,39 @@ function renderFloor(key) {
   requestAnimationFrame(() => requestAnimationFrame(() => grid.classList.remove("transitioning")));
 }
 
+/* ================= Real layout pilot (Zumroud GF only) ================= */
+function showGridView() {
+  $("#gridFrame").style.display = "";
+  $("#realLayoutFrame").style.display = "none";
+  $("#realLayoutToggleLabel").textContent = "View Real Floor Plan (pilot)";
+}
+
+function showRealLayoutView() {
+  $("#gridFrame").style.display = "none";
+  $("#realLayoutFrame").style.display = "";
+  $("#realLayoutToggleLabel").textContent = "Back to Tile View";
+  renderRealLayout();
+}
+
+function renderRealLayout() {
+  const dotsWrap = $("#rlDots");
+  dotsWrap.innerHTML = "";
+  const rooms = buildingData("zumroud").rooms;
+  Object.entries(ZUMROUD_GF_POSITIONS).forEach(([rid, pos]) => {
+    const room = rooms[rid];
+    if (!room) return;
+    const dot = document.createElement("div");
+    dot.className = "rl-dot" + (pos.confidence === "estimated" ? " estimated" : "");
+    dot.style.left = pos.xPct + "%";
+    dot.style.top = pos.yPct + "%";
+    dot.style.background = typeColor(room.type);
+    dot.title = `Room ${rid} (${pos.confidence === "estimated" ? "estimated position" : "exact position"})`;
+    dot.textContent = rid.slice(-2);
+    dot.addEventListener("click", () => showDetail("zumroud", Number(rid)));
+    dotsWrap.appendChild(dot);
+  });
+}
+
 function renderFloorContent(key) {
   const b = buildingData(currentBuilding);
   const f = b.floors[key];
@@ -206,6 +242,15 @@ function renderFloorContent(key) {
   const photoStat = $("#photoStat");
   if (noPhoto > 0) { $("#noPhotoCount").textContent = noPhoto; photoStat.style.display = ""; }
   else { photoStat.style.display = "none"; }
+
+  // Real-layout pilot toggle — only wired up for Zumroud GF right now
+  const rlToggle = $("#realLayoutToggle");
+  if (currentBuilding === "zumroud" && key === "GF") {
+    rlToggle.style.display = "";
+  } else {
+    rlToggle.style.display = "none";
+  }
+  showGridView();
 
   const grid = $("#grid");
   grid.innerHTML = "";
@@ -612,6 +657,20 @@ function showDetail(bkey, roomNum) {
       No photo available yet<br>for room ${room.room}</div>`;
   }
 
+  const sizeRow = $("#dSizeRow");
+  if (room.size && room.size.total != null) {
+    sizeRow.style.display = "";
+    const parts = [];
+    if (room.size.room != null) parts.push(`<span>Room <b>${room.size.room} m²</b></span>`);
+    if (room.size.bathroom != null) parts.push(`<span>Bathroom <b>${room.size.bathroom} m²</b></span>`);
+    if (room.size.balcony != null) parts.push(`<span>Balcony <b>${room.size.balcony} m²</b></span>`);
+    sizeRow.innerHTML = `<div class="size-total">${room.size.total} m² <small>total carpet area</small></div>
+      <div class="size-breakdown">${parts.join("")}</div>`;
+  } else {
+    sizeRow.style.display = "none";
+    sizeRow.innerHTML = "";
+  }
+
   const tagsWrap = $("#dTags");
   tagsWrap.innerHTML = "";
   if (room.codes && room.codes.length) {
@@ -920,6 +979,10 @@ function initApp() {
   });
 
   $("#themeToggle").addEventListener("click", toggleTheme);
+  $("#realLayoutToggle").addEventListener("click", () => {
+    const showingReal = $("#realLayoutFrame").style.display !== "none";
+    if (showingReal) showGridView(); else showRealLayoutView();
+  });
   $("#resortMapBtn").addEventListener("click", openResortMap);
   $("#overviewBtn").addEventListener("click", openOverview);
   $("#dashboardBtn").addEventListener("click", openDashboard);
