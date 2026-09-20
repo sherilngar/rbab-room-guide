@@ -42,10 +42,10 @@
       </div>
 
       <div class="header-actions">
-        <button class="text-btn" id="resortMapBtn" title="Resort map">
+        <a class="text-btn" href="https://easymap.ae/rixos-bab-al-bahr/" target="_blank" rel="noopener" title="Resort map (opens in a new tab)">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 20l-6-3V5l6 3m0 12l6-3m-6 3V8m6 9l6 3V7l-6-3m0 15V5m0 0L9 8"/></svg>
           Resort Map
-        </button>
+        </a>
         <button class="text-btn" id="overviewBtn" title="All-buildings overview">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
           Overview
@@ -88,24 +88,12 @@
           <div class="stat"><b id="roomCount">0</b> rooms</div>
           <div class="stat"><b id="connectCount">0</b> interconnecting</div>
           <div class="stat warn" id="photoStat" style="display:none"><b id="noPhotoCount">0</b> awaiting photos</div>
-          <button class="text-btn" id="realLayoutToggle" style="display:none; margin-left:auto;">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
-            <span id="realLayoutToggleLabel">View Real Floor Plan (pilot)</span>
-          </button>
         </div>
 
         <div class="plan-frame" id="gridFrame">
           <span class="tick-br"></span><span class="tick-bl"></span>
           <div class="grid" id="grid"></div>
           <div class="legend" id="legend"></div>
-        </div>
-
-        <div class="real-layout-frame" id="realLayoutFrame" style="display:none">
-          <div class="rl-badge">⚠ Pilot — 25 of 34 room positions extracted precisely from the real drawing; 9 are estimated by interpolation. Not final.</div>
-          <div class="rl-image-wrap">
-            <img src="assets/floorplans/zumroud-gf.jpg" alt="Zumroud Ground Floor — real architectural layout">
-            <div id="rlDots"></div>
-          </div>
         </div>
       </div>
     </main>
@@ -164,15 +152,6 @@
       <button class="tour-skip" id="tourSkip">Skip</button>
       <button class="tour-next" id="tourNext">Next</button>
     </div>
-  </div>
-</div>
-
-<div class="modal-overlay" id="resortMapModal">
-  <div class="modal-box modal-box-wide">
-    <button class="modal-close" id="resortMapClose">✕</button>
-    <h2>Resort Map</h2>
-    <div class="modal-sub">Testing a direct embed of the hotel's EasyMap. If it's blank, they're blocking embedding and we'd need an embed code from them directly.</div>
-    <div id="resortMapBody"></div>
   </div>
 </div>
 

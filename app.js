@@ -13,8 +13,6 @@ const TYPE_COLOR = {
 const UPSELL_TIERS = [{"key": "t1", "label": "Occupancy 85\u2013100%", "extraPax": 570, "grid": {"KGA": {"KGAOV": 90, "KGE": 180, "KGEOV": 270, "SKA": 1170, "SKB": 1260, "SKC": 1350, "D2A/D2C": 1485, "D2B/D2D": 1575, "SKD": 1710, "SKP": 2250, "SXA": 3150}, "KGAOV": {"KGE": 90, "KGEOV": 180, "SKA": 1080, "SKB": 1170, "SKC": 1260, "D2A/D2C": 1395, "D2B/D2D": 1485, "SKD": 1620, "SKP": 2160, "SXA": 3060}, "KGE": {"KGEOV": 90, "SKA": 990, "SKB": 1080, "SKC": 1170, "D2A/D2C": 1305, "D2B/D2D": 1395, "SKD": 1530, "SKP": 2070, "SXA": 2970}, "KGEOV": {"SKA": 900, "SKB": 990, "SKC": 1080, "D2A/D2C": 1215, "D2B/D2D": 1305, "SKD": 1440, "SKP": 1980, "SXA": 2880}, "SKA": {"SKB": 90, "SKC": 180, "SKD": 540, "SKP": 1080, "SXA": 1980}, "SKB": {"SKC": 90, "SKD": 450, "SKP": 990, "SXA": 1890}, "SKC": {"SKD": 360, "SKP": 900, "SXA": 1800}, "D2A/D2C": {"D2B/D2D": 90, "SKD": 225, "SKP": 765, "SXA": 1665}, "D2B/D2D": {"SKD": 135, "SKP": 675, "SXA": 1575}, "SKD": {"SKP": 540, "SXA": 1440}, "SKP": {"SXA": 900}}}, {"key": "t2", "label": "Occupancy <50% or 4+ Nights", "extraPax": 570, "grid": {"KGA": {"KGAOV": 70, "KGE": 140, "KGEOV": 210, "SKA": 910, "SKB": 980, "SKC": 1050, "D2A/D2C": 1155, "D2B/D2D": 1225, "SKD": 1330, "SKP": 1750, "SXA": 2450}, "KGAOV": {"KGE": 70, "KGEOV": 140, "SKA": 840, "SKB": 910, "SKC": 980, "D2A/D2C": 1085, "D2B/D2D": 1155, "SKD": 1260, "SKP": 1680, "SXA": 2380}, "KGE": {"KGEOV": 70, "SKA": 770, "SKB": 840, "SKC": 910, "D2A/D2C": 1015, "D2B/D2D": 1085, "SKD": 1190, "SKP": 1610, "SXA": 2310}, "KGEOV": {"SKA": 700, "SKB": 770, "SKC": 840, "D2A/D2C": 945, "D2B/D2D": 1015, "SKD": 1120, "SKP": 1540, "SXA": 2240}, "SKA": {"SKB": 70, "SKC": 140, "SKD": 420, "SKP": 840, "SXA": 1540}, "SKB": {"SKC": 70, "SKD": 350, "SKP": 770, "SXA": 1470}, "SKC": {"SKD": 280, "SKP": 700, "SXA": 1400}, "D2A/D2C": {"D2B/D2D": 70, "SKD": 175, "SKP": 595, "SXA": 1295}, "D2B/D2D": {"SKD": 105, "SKP": 525, "SXA": 1225}, "SKD": {"SKP": 420, "SXA": 1120}, "SKP": {"SXA": 700}}}, {"key": "t3", "label": "Occupancy 50\u201370%", "extraPax": 485, "grid": {"KGA": {"KGAOV": 60, "KGE": 120, "KGEOV": 180, "SKA": 780, "SKB": 840, "SKC": 900, "D2A/D2C": 990, "D2B/D2D": 1050, "SKD": 1140, "SKP": 1500, "SXA": 2100}, "KGAOV": {"KGE": 60, "KGEOV": 120, "SKA": 720, "SKB": 780, "SKC": 840, "D2A/D2C": 930, "D2B/D2D": 990, "SKD": 1080, "SKP": 1440, "SXA": 2040}, "KGE": {"KGEOV": 60, "SKA": 660, "SKB": 720, "SKC": 780, "D2A/D2C": 870, "D2B/D2D": 930, "SKD": 1020, "SKP": 1380, "SXA": 1980}, "KGEOV": {"SKA": 600, "SKB": 660, "SKC": 720, "D2A/D2C": 810, "D2B/D2D": 870, "SKD": 960, "SKP": 1320, "SXA": 1920}, "SKA": {"SKB": 60, "SKC": 120, "SKD": 360, "SKP": 720, "SXA": 1320}, "SKB": {"SKC": 60, "SKD": 300, "SKP": 660, "SXA": 1260}, "SKC": {"SKD": 240, "SKP": 600, "SXA": 1200}, "D2A/D2C": {"D2B/D2D": 60, "SKD": 150, "SKP": 510, "SXA": 1110}, "D2B/D2D": {"SKD": 90, "SKP": 450, "SXA": 1050}, "SKD": {"SKP": 360, "SXA": 960}, "SKP": {"SXA": 600}}}, {"key": "t4", "label": "Occupancy 70\u201385%", "extraPax": 425, "grid": {"KGA": {"KGAOV": 50, "KGE": 100, "KGEOV": 150, "SKA": 650, "SKB": 700, "SKC": 750, "D2A/D2C": 825, "D2B/D2D": 875, "SKD": 950, "SKP": 1250, "SXA": 1750}, "KGAOV": {"KGE": 50, "KGEOV": 100, "SKA": 600, "SKB": 650, "SKC": 700, "D2A/D2C": 775, "D2B/D2D": 825, "SKD": 900, "SKP": 1200, "SXA": 1700}, "KGE": {"KGEOV": 50, "SKA": 550, "SKB": 600, "SKC": 650, "D2A/D2C": 725, "D2B/D2D": 775, "SKD": 850, "SKP": 1150, "SXA": 1650}, "KGEOV": {"SKA": 500, "SKB": 550, "SKC": 600, "D2A/D2C": 675, "D2B/D2D": 725, "SKD": 800, "SKP": 1100, "SXA": 1600}, "SKA": {"SKB": 50, "SKC": 100, "SKD": 300, "SKP": 600, "SXA": 1100}, "SKB": {"SKC": 50, "SKD": 250, "SKP": 550, "SXA": 1050}, "SKC": {"SKD": 200, "SKP": 500, "SXA": 1000}, "D2A/D2C": {"D2B/D2D": 50, "SKD": 125, "SKP": 425, "SXA": 925}, "D2B/D2D": {"SKD": 75, "SKP": 375, "SXA": 875}, "SKD": {"SKP": 300, "SXA": 800}, "SKP": {"SXA": 500}}}];
 const LATE_CHECKOUT_DATA = [{"category": "Deluxe", "time": "16:00", "charges": 400, "room": 300, "fb": 100}, {"category": "Deluxe", "time": "18:00", "charges": 600, "room": 450, "fb": 150}, {"category": "Premium / Family Suite / Interconnecting", "time": "16:00", "charges": 600, "room": 450, "fb": 150}, {"category": "Premium / Family Suite / Interconnecting", "time": "18:00", "charges": 800, "room": 600, "fb": 200}, {"category": "All Suites", "time": "16:00", "charges": 750, "room": 562.5, "fb": 187.5}, {"category": "All Suites", "time": "18:00", "charges": 950, "room": 712.5, "fb": 237.5}];
 
-// Pilot data: real room positions extracted from the architectural drawing (Zumroud GF only)
-const ZUMROUD_GF_POSITIONS = {"1001": {"xPct": 41.69, "yPct": 41.09, "confidence": "extracted"}, "1018": {"xPct": 65.28, "yPct": 53.26, "confidence": "extracted"}, "1019": {"xPct": 64.01, "yPct": 53.23, "confidence": "extracted"}, "1020": {"xPct": 61.47, "yPct": 50.83, "confidence": "extracted"}, "1021": {"xPct": 58.39, "yPct": 50.91, "confidence": "extracted"}, "1022": {"xPct": 56.81, "yPct": 50.77, "confidence": "extracted"}, "1023": {"xPct": 53.65, "yPct": 50.79, "confidence": "extracted"}, "1024": {"xPct": 50.17, "yPct": 50.85, "confidence": "extracted"}, "1025": {"xPct": 42.43, "yPct": 59.09, "confidence": "extracted"}, "1026": {"xPct": 42.41, "yPct": 62.7, "confidence": "extracted"}, "1030": {"xPct": 44.73, "yPct": 74.36, "confidence": "extracted"}, "1031": {"xPct": 44.71, "yPct": 73.23, "confidence": "extracted"}, "1036": {"xPct": 41.15, "yPct": 61.44, "confidence": "extracted"}, "1037": {"xPct": 30.91, "yPct": 50.81, "confidence": "extracted"}, "1041": {"xPct": 19.35, "yPct": 53.19, "confidence": "extracted"}, "1042": {"xPct": 18.25, "yPct": 53.19, "confidence": "extracted"}, "1047": {"xPct": 29.73, "yPct": 50.21, "confidence": "extracted"}, "1048": {"xPct": 33.33, "yPct": 50.21, "confidence": "extracted"}, "1051": {"xPct": 38.79, "yPct": 73.19, "confidence": "extracted"}, "1052": {"xPct": 38.79, "yPct": 74.17, "confidence": "extracted"}, "1044": {"xPct": 22.05, "yPct": 50.2, "confidence": "estimated"}, "1045": {"xPct": 24.61, "yPct": 50.2, "confidence": "estimated"}, "1046": {"xPct": 27.16, "yPct": 50.21, "confidence": "estimated"}, "1040": {"xPct": 22.24, "yPct": 52.6, "confidence": "estimated"}, "1039": {"xPct": 25.13, "yPct": 51.99, "confidence": "estimated"}, "1038": {"xPct": 28.02, "yPct": 51.41, "confidence": "estimated"}, "1027": {"xPct": 42.98, "yPct": 65.33, "confidence": "estimated"}, "1028": {"xPct": 43.56, "yPct": 67.96, "confidence": "estimated"}, "1029": {"xPct": 44.15, "yPct": 70.59, "confidence": "estimated"}, "1035": {"xPct": 40.56, "yPct": 64.38, "confidence": "estimated"}, "1034": {"xPct": 39.97, "yPct": 67.3, "confidence": "estimated"}, "1033": {"xPct": 39.37, "yPct": 70.25, "confidence": "estimated"}, "1049": {"xPct": 16.94, "yPct": 48.2, "confidence": "estimated"}, "1050": {"xPct": 17.42, "yPct": 45.75, "confidence": "estimated"}};
 
 const TYPE_DESC = {
   KGA: "Deluxe King Garden", KGAOV: "Deluxe King View", KGE: "Premium King Garden", KGEOV: "Premium King View",
@@ -200,39 +198,6 @@ function renderFloor(key) {
   requestAnimationFrame(() => requestAnimationFrame(() => grid.classList.remove("transitioning")));
 }
 
-/* ================= Real layout pilot (Zumroud GF only) ================= */
-function showGridView() {
-  $("#gridFrame").style.display = "";
-  $("#realLayoutFrame").style.display = "none";
-  $("#realLayoutToggleLabel").textContent = "View Real Floor Plan (pilot)";
-}
-
-function showRealLayoutView() {
-  $("#gridFrame").style.display = "none";
-  $("#realLayoutFrame").style.display = "";
-  $("#realLayoutToggleLabel").textContent = "Back to Tile View";
-  renderRealLayout();
-}
-
-function renderRealLayout() {
-  const dotsWrap = $("#rlDots");
-  dotsWrap.innerHTML = "";
-  const rooms = buildingData("zumroud").rooms;
-  Object.entries(ZUMROUD_GF_POSITIONS).forEach(([rid, pos]) => {
-    const room = rooms[rid];
-    if (!room) return;
-    const dot = document.createElement("div");
-    dot.className = "rl-dot" + (pos.confidence === "estimated" ? " estimated" : "");
-    dot.style.left = pos.xPct + "%";
-    dot.style.top = pos.yPct + "%";
-    dot.style.background = typeColor(room.type);
-    dot.title = `Room ${rid} (${pos.confidence === "estimated" ? "estimated position" : "exact position"})`;
-    dot.textContent = rid.slice(-2);
-    dot.addEventListener("click", () => showDetail("zumroud", Number(rid)));
-    dotsWrap.appendChild(dot);
-  });
-}
-
 function renderFloorContent(key) {
   const b = buildingData(currentBuilding);
   const f = b.floors[key];
@@ -246,15 +211,6 @@ function renderFloorContent(key) {
   const photoStat = $("#photoStat");
   if (noPhoto > 0) { $("#noPhotoCount").textContent = noPhoto; photoStat.style.display = ""; }
   else { photoStat.style.display = "none"; }
-
-  // Real-layout pilot toggle — only wired up for Zumroud GF right now
-  const rlToggle = $("#realLayoutToggle");
-  if (currentBuilding === "zumroud" && key === "GF") {
-    rlToggle.style.display = "";
-  } else {
-    rlToggle.style.display = "none";
-  }
-  showGridView();
 
   const grid = $("#grid");
   grid.innerHTML = "";
@@ -305,21 +261,6 @@ function attachRoomEvents(tile, roomNum) {
     else showDetail(currentBuilding, roomNum);
   });
 }
-
-/* ================= Building overview (all buildings, modal) ================= */
-/* ================= Resort Map (schematic placeholder) ================= */
-function openResortMap() {
-  $("#resortMapBody").innerHTML = `
-    <div class="rm-iframe-wrap">
-      <iframe id="rmIframe" src="https://easymap.ae/rixos-bab-al-bahr/" loading="lazy"></iframe>
-    </div>
-    <div class="rm-fallback" id="rmFallback">
-      If nothing loaded above, EasyMap is blocking embedding (common for these tools) — that means real integration needs them to provide an embed code directly.
-      <a href="https://easymap.ae/rixos-bab-al-bahr/" target="_blank" rel="noopener">Open it in a new tab instead →</a>
-    </div>`;
-  $("#resortMapModal").classList.add("show");
-}
-function closeResortMap() { $("#resortMapModal").classList.remove("show"); }
 
 /* ================= Building overview (all buildings, modal) ================= */
 function openOverview() {
@@ -974,7 +915,6 @@ function setupShortcuts() {
     if (e.key === "Escape") {
       if ($("#tourOverlay").classList.contains("show")) endTour();
       else if ($("#lightbox").classList.contains("show")) closeLightbox();
-      else if ($("#resortMapModal").classList.contains("show")) closeResortMap();
       else if ($("#overviewModal").classList.contains("show")) closeOverview();
       else if ($("#lateCheckoutModal").classList.contains("show")) closeLateCheckout();
       else if ($("#upsellModal").classList.contains("show")) closeUpsell();
@@ -1087,11 +1027,6 @@ function initApp() {
   });
 
   $("#themeToggle").addEventListener("click", toggleTheme);
-  $("#realLayoutToggle").addEventListener("click", () => {
-    const showingReal = $("#realLayoutFrame").style.display !== "none";
-    if (showingReal) showGridView(); else showRealLayoutView();
-  });
-  $("#resortMapBtn").addEventListener("click", openResortMap);
   $("#overviewBtn").addEventListener("click", openOverview);
   $("#upsellBtn").addEventListener("click", openUpsell);
   $("#upOccInput").addEventListener("input", (e) => {
@@ -1106,11 +1041,9 @@ function initApp() {
     renderUpsellResults();
   });
   $("#lateCheckoutBtn").addEventListener("click", openLateCheckout);
-  $("#resortMapModal").addEventListener("click", (e) => { if (e.target.id === "resortMapModal") closeResortMap(); });
   $("#overviewModal").addEventListener("click", (e) => { if (e.target.id === "overviewModal") closeOverview(); });
   $("#upsellModal").addEventListener("click", (e) => { if (e.target.id === "upsellModal") closeUpsell(); });
   $("#lateCheckoutModal").addEventListener("click", (e) => { if (e.target.id === "lateCheckoutModal") closeLateCheckout(); });
-  $("#resortMapClose").addEventListener("click", closeResortMap);
   $("#overviewClose").addEventListener("click", closeOverview);
   $("#upsellClose").addEventListener("click", closeUpsell);
   $("#lateCheckoutClose").addEventListener("click", closeLateCheckout);
