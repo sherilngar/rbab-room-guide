@@ -998,6 +998,54 @@ header.topbar {
 }
 .rl-dot:hover { transform: translate(-50%, -50%) scale(1.5); z-index: 5; }
 .rl-dot.estimated { border-style: dashed; }
+
+/* ================= Upsell Grid ================= */
+.up-filter-row { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 14px; }
+.up-tier-chip { font-size: 11.5px; }
+.up-supplement-note {
+  background: var(--bronze-soft);
+  color: var(--bronze-deep);
+  border-radius: 10px;
+  padding: 9px 14px;
+  font-size: 12px;
+  margin-bottom: 14px;
+}
+.up-select-row { display: flex; gap: 16px; margin-bottom: 16px; flex-wrap: wrap; }
+.up-select-row label {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--ink-soft);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+.up-select-row select {
+  border: 1px solid var(--line);
+  background: var(--paper);
+  color: var(--ink);
+  padding: 8px 12px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-family: inherit;
+  min-width: 160px;
+}
+.up-select-row select:disabled { opacity: 0.5; }
+.up-result {
+  background: var(--bronze);
+  color: #fff;
+  border-radius: 12px;
+  padding: 20px;
+  text-align: center;
+  margin-bottom: 10px;
+}
+.up-result-label { font-size: 12px; opacity: 0.85; margin-bottom: 6px; }
+.up-result-price { font-family: "Source Serif 4", Georgia, serif; font-size: 30px; font-weight: 600; }
+.up-grid-scroll { overflow-x: auto; }
+.up-full-grid { font-size: 11px; white-space: nowrap; }
+.up-full-grid th, .up-full-grid td { padding: 5px 8px; text-align: center; }
+.up-full-grid td:first-child, .up-full-grid th:first-child { text-align: left; position: sticky; left: 0; background: var(--panel); }
 .modal-box h2 {
   font-family: "Source Serif 4", Georgia, serif;
   font-weight: 600;

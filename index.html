@@ -50,13 +50,13 @@
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
           Overview
         </button>
-        <button class="text-btn" id="dashboardBtn" title="Coverage dashboard">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="9"/><rect x="14" y="3" width="7" height="5"/><rect x="14" y="12" width="7" height="9"/><rect x="3" y="16" width="7" height="5"/></svg>
-          Coverage
+        <button class="text-btn" id="upsellBtn" title="Upselling grid">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 17l6-6 4 4 8-8M21 7v6h-6"/></svg>
+          Upsell Grid
         </button>
-        <button class="text-btn" id="glossaryBtn" title="Feature code glossary">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M9.5 9a2.5 2.5 0 0 1 5 0c0 1.5-2.5 2-2.5 3.5"/><circle cx="12" cy="16.5" r="0.6" fill="currentColor" stroke="none"/></svg>
-          Glossary
+        <button class="text-btn" id="lateCheckoutBtn" title="Late checkout supplements">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 3.5"/></svg>
+          Late Checkout
         </button>
         <button class="icon-btn" id="tourBtn" title="Show walkthrough">?</button>
         <button class="icon-btn" id="themeToggle" title="Toggle dark mode (D)"></button>
@@ -185,21 +185,21 @@
   </div>
 </div>
 
-<div class="modal-overlay" id="dashboardModal">
-  <div class="modal-box">
-    <button class="modal-close" id="dashboardClose">✕</button>
-    <h2>Photo Coverage</h2>
-    <div class="modal-sub">How many rooms have a view photo, by building and floor.</div>
-    <div id="dashBody"></div>
+<div class="modal-overlay" id="upsellModal">
+  <div class="modal-box modal-box-wide">
+    <button class="modal-close" id="upsellClose">✕</button>
+    <h2>Upselling Grid</h2>
+    <div class="modal-sub">FO upselling prices by occupancy/nights, from room category → to room category. Filter to find a specific price, or browse the full grid.</div>
+    <div id="upsellBody"></div>
   </div>
 </div>
 
-<div class="modal-overlay" id="glossaryModal">
+<div class="modal-overlay" id="lateCheckoutModal">
   <div class="modal-box">
-    <button class="modal-close" id="glossaryClose">✕</button>
-    <h2>Feature Code Glossary</h2>
-    <div class="modal-sub">Codes are pulled straight from Opera, confirmed against the official code list.</div>
-    <div id="glossBody"></div>
+    <button class="modal-close" id="lateCheckoutClose">✕</button>
+    <h2>Late Checkout Supplements</h2>
+    <div class="modal-sub">Charges split between room and F&amp;B allocation, by room category and checkout time.</div>
+    <div id="lateCheckoutBody"></div>
   </div>
 </div>
 
