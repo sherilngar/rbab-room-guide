@@ -818,17 +818,61 @@ function renderUpsell() {
 }
 
 /* ================= Late Checkout ================= */
+/* ================= Late Checkout ================= */
+let lcCategory = "";
+let lcTime = "";
+
 function openLateCheckout() {
-  const wrap = $("#lateCheckoutBody");
-  let html = `<table class="gloss-table"><thead><tr><th>Room Type</th><th>Check Out</th><th>Charges</th><th>Room Alloc.</th><th>F&amp;B Alloc.</th></tr></thead><tbody>`;
-  LATE_CHECKOUT_DATA.forEach((r) => {
-    html += `<tr><td><b>${r.category}</b></td><td>${r.time}H</td><td><b>AED ${r.charges}</b></td><td>AED ${r.room}</td><td>AED ${r.fb}</td></tr>`;
-  });
-  html += `</tbody></table>`;
-  wrap.innerHTML = html;
+  lcCategory = "";
+  lcTime = "";
+  renderLateCheckout();
   $("#lateCheckoutModal").classList.add("show");
 }
 function closeLateCheckout() { $("#lateCheckoutModal").classList.remove("show"); }
+
+function renderLateCheckout() {
+  const wrap = $("#lateCheckoutBody");
+  const categories = Array.from(new Set(LATE_CHECKOUT_DATA.map((r) => r.category)));
+  const times = Array.from(new Set(LATE_CHECKOUT_DATA.map((r) => r.time)));
+
+  let html = `<div class="up-filter-row">`;
+  categories.forEach((c) => {
+    html += `<button class="filter-chip lc-cat-chip${c === lcCategory ? " active" : ""}" data-cat="${c}">${c}</button>`;
+  });
+  html += `</div><div class="up-filter-row">`;
+  times.forEach((t) => {
+    html += `<button class="filter-chip lc-time-chip${t === lcTime ? " active" : ""}" data-time="${t}">${t}H</button>`;
+  });
+  html += `</div>`;
+
+  const matches = LATE_CHECKOUT_DATA.filter((r) => (!lcCategory || r.category === lcCategory) && (!lcTime || r.time === lcTime));
+
+  if (lcCategory && lcTime && matches.length === 1) {
+    const r = matches[0];
+    html += `<div class="up-result">
+      <div class="up-result-label">${r.category} — ${r.time}H Checkout</div>
+      <div class="up-result-price">AED ${r.charges}</div>
+      <div class="lc-breakdown">
+        <span>Room Allocation <b>AED ${r.room}</b></span>
+        <span>F&amp;B Allocation <b>AED ${r.fb}</b></span>
+      </div>
+    </div>`;
+  } else {
+    html += `<table class="gloss-table"><thead><tr><th>Room Type</th><th>Check Out</th><th>Charges</th><th>Room Alloc.</th><th>F&amp;B Alloc.</th></tr></thead><tbody>`;
+    matches.forEach((r) => {
+      html += `<tr><td><b>${r.category}</b></td><td>${r.time}H</td><td><b>AED ${r.charges}</b></td><td>AED ${r.room}</td><td>AED ${r.fb}</td></tr>`;
+    });
+    html += `</tbody></table>`;
+  }
+
+  wrap.innerHTML = html;
+  $$(".lc-cat-chip", wrap).forEach((chip) => {
+    chip.addEventListener("click", () => { lcCategory = chip.dataset.cat === lcCategory ? "" : chip.dataset.cat; renderLateCheckout(); });
+  });
+  $$(".lc-time-chip", wrap).forEach((chip) => {
+    chip.addEventListener("click", () => { lcTime = chip.dataset.time === lcTime ? "" : chip.dataset.time; renderLateCheckout(); });
+  });
+}
 
 /* ================= Search (global, live dropdown) ================= */
 function allRoomsFlat() {
