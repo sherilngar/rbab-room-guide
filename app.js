@@ -818,39 +818,64 @@ function renderUpsell() {
 }
 
 /* ================= Late Checkout ================= */
-/* ================= Late Checkout ================= */
-let lcCategory = "";
+const LC_TYPE_TIER = {
+  KGA: "Deluxe", KGAOV: "Deluxe", TWA: "Deluxe", TWAOV: "Deluxe",
+  KGE: "Premium / Family Suite / Interconnecting", KGEOV: "Premium / Family Suite / Interconnecting",
+  SKB: "Premium / Family Suite / Interconnecting", SKC: "Premium / Family Suite / Interconnecting",
+  SKD: "All Suites", SKP: "All Suites", SXA: "All Suites", SKA: "All Suites",
+};
+const LC_TIER_RANK = { "Deluxe": 0, "Premium / Family Suite / Interconnecting": 1, "All Suites": 2 };
+
+let lcType = "";
+let lcInterconnecting = false;
 let lcTime = "";
 
 function openLateCheckout() {
-  lcCategory = "";
-  lcTime = "";
+  lcType = ""; lcInterconnecting = false; lcTime = "";
   renderLateCheckout();
   $("#lateCheckoutModal").classList.add("show");
 }
 function closeLateCheckout() { $("#lateCheckoutModal").classList.remove("show"); }
 
+function lcEffectiveTier(typeCode, interconnecting) {
+  const baseTier = LC_TYPE_TIER[typeCode];
+  if (!baseTier) return null;
+  if (interconnecting && LC_TIER_RANK["Premium / Family Suite / Interconnecting"] > LC_TIER_RANK[baseTier]) {
+    return "Premium / Family Suite / Interconnecting";
+  }
+  return baseTier;
+}
+
 function renderLateCheckout() {
   const wrap = $("#lateCheckoutBody");
-  const categories = Array.from(new Set(LATE_CHECKOUT_DATA.map((r) => r.category)));
+  const typeCodes = Object.keys(LC_TYPE_TIER);
   const times = Array.from(new Set(LATE_CHECKOUT_DATA.map((r) => r.time)));
 
   let html = `<div class="up-filter-row">`;
-  categories.forEach((c) => {
-    html += `<button class="filter-chip lc-cat-chip${c === lcCategory ? " active" : ""}" data-cat="${c}">${c}</button>`;
+  typeCodes.forEach((t) => {
+    html += `<button class="filter-chip lc-type-chip${t === lcType ? " active" : ""}" data-type="${t}">${t}</button>`;
   });
-  html += `</div><div class="up-filter-row">`;
+  html += `</div>
+    <div class="up-filter-row">
+      <button class="filter-chip lc-ic-chip${lcInterconnecting ? " active" : ""}" id="lcIcChip">Interconnecting room</button>
+    </div>
+    <div class="up-filter-row">`;
   times.forEach((t) => {
     html += `<button class="filter-chip lc-time-chip${t === lcTime ? " active" : ""}" data-time="${t}">${t}H</button>`;
   });
   html += `</div>`;
 
-  const matches = LATE_CHECKOUT_DATA.filter((r) => (!lcCategory || r.category === lcCategory) && (!lcTime || r.time === lcTime));
+  const tier = lcType ? lcEffectiveTier(lcType, lcInterconnecting) : null;
+  const matches = LATE_CHECKOUT_DATA.filter((r) => (!tier || r.category === tier) && (!lcTime || r.time === lcTime));
 
-  if (lcCategory && lcTime && matches.length === 1) {
+  if (tier) {
+    html += `<div class="up-supplement-note">${lcType} ${lcInterconnecting ? "(interconnecting) " : ""}falls under <b>${tier}</b> pricing.</div>`;
+  }
+
+  if (tier && lcTime && matches.length === 1) {
     const r = matches[0];
     html += `<div class="up-result">
-      <div class="up-result-label">${r.category} — ${r.time}H Checkout</div>
+      <div class="up-result-label">${lcType} — ${r.time}H Checkout</div>
       <div class="up-result-price">AED ${r.charges}</div>
       <div class="lc-breakdown">
         <span>Room Allocation <b>AED ${r.room}</b></span>
@@ -858,7 +883,7 @@ function renderLateCheckout() {
       </div>
     </div>`;
   } else {
-    html += `<table class="gloss-table"><thead><tr><th>Room Type</th><th>Check Out</th><th>Charges</th><th>Room Alloc.</th><th>F&amp;B Alloc.</th></tr></thead><tbody>`;
+    html += `<table class="gloss-table"><thead><tr><th>Category</th><th>Check Out</th><th>Charges</th><th>Room Alloc.</th><th>F&amp;B Alloc.</th></tr></thead><tbody>`;
     matches.forEach((r) => {
       html += `<tr><td><b>${r.category}</b></td><td>${r.time}H</td><td><b>AED ${r.charges}</b></td><td>AED ${r.room}</td><td>AED ${r.fb}</td></tr>`;
     });
@@ -866,9 +891,10 @@ function renderLateCheckout() {
   }
 
   wrap.innerHTML = html;
-  $$(".lc-cat-chip", wrap).forEach((chip) => {
-    chip.addEventListener("click", () => { lcCategory = chip.dataset.cat === lcCategory ? "" : chip.dataset.cat; renderLateCheckout(); });
+  $$(".lc-type-chip", wrap).forEach((chip) => {
+    chip.addEventListener("click", () => { lcType = chip.dataset.type === lcType ? "" : chip.dataset.type; renderLateCheckout(); });
   });
+  $("#lcIcChip").addEventListener("click", () => { lcInterconnecting = !lcInterconnecting; renderLateCheckout(); });
   $$(".lc-time-chip", wrap).forEach((chip) => {
     chip.addEventListener("click", () => { lcTime = chip.dataset.time === lcTime ? "" : chip.dataset.time; renderLateCheckout(); });
   });

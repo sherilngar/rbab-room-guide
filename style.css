@@ -1058,6 +1058,7 @@ header.topbar {
   opacity: 0.9;
 }
 .lc-breakdown b { font-size: 14px; display: block; margin-top: 2px; }
+.lc-ic-chip.active { background: var(--gold-accent); border-color: var(--gold-accent); color: #3a2e00; }
 .modal-box h2 {
   font-family: "Source Serif 4", Georgia, serif;
   font-weight: 600;
