@@ -190,6 +190,15 @@
     <button class="modal-close" id="upsellClose">✕</button>
     <h2>Upselling Grid</h2>
     <div class="modal-sub">FO upselling prices by occupancy/nights, from room category → to room category. Filter to find a specific price, or browse the full grid.</div>
+    <div class="up-occ-row" id="upOccRow">
+      <label>Occupancy %
+        <input type="number" id="upOccInput" min="0" max="100" placeholder="e.g. 45">
+      </label>
+      <label class="up-nights-check">
+        <input type="checkbox" id="upNightsCheck">
+        4+ nights stay
+      </label>
+    </div>
     <div id="upsellBody"></div>
   </div>
 </div>

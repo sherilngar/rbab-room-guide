@@ -763,36 +763,25 @@ function upsellTierFromOccupancy(occ, nights4Plus) {
 function openUpsell() {
   upsellOcc = ""; upsellNights4Plus = false;
   upsellFrom = ""; upsellTo = "";
-  renderUpsell();
+  $("#upOccInput").value = "";
+  $("#upNightsCheck").checked = false;
+  $("#upOccInput").disabled = false;
+  renderUpsellResults();
   $("#upsellModal").classList.add("show");
 }
 function closeUpsell() { $("#upsellModal").classList.remove("show"); }
 
-function renderUpsell() {
+function renderUpsellResults() {
   const tierKey = upsellTierFromOccupancy(upsellOcc, upsellNights4Plus);
   const tier = tierKey ? UPSELL_TIERS.find((t) => t.key === tierKey) : null;
   const wrap = $("#upsellBody");
 
-  let html = `
-    <div class="up-occ-row">
-      <label>Occupancy %
-        <input type="number" id="upOccInput" min="0" max="100" placeholder="e.g. 45" value="${upsellOcc}" ${upsellNights4Plus ? "disabled" : ""}>
-      </label>
-      <label class="up-nights-check">
-        <input type="checkbox" id="upNightsCheck" ${upsellNights4Plus ? "checked" : ""}>
-        4+ nights stay
-      </label>
-    </div>`;
-
   if (!tier) {
-    html += `<div class="up-prompt">Enter an occupancy % (or check "4+ nights stay") to see the matching prices.</div>`;
-    wrap.innerHTML = html;
-    $("#upOccInput").addEventListener("input", (e) => { upsellOcc = e.target.value; renderUpsell(); });
-    $("#upNightsCheck").addEventListener("change", (e) => { upsellNights4Plus = e.target.checked; renderUpsell(); });
+    wrap.innerHTML = `<div class="up-prompt">Enter an occupancy % (or check "4+ nights stay") to see the matching prices.</div>`;
     return;
   }
 
-  html += `<div class="up-supplement-note">Matched tier: <b>${tier.label}</b> — extra-pax supplement (if not same occupancy): <b>AED ${tier.extraPax}</b></div>
+  let html = `<div class="up-supplement-note">Matched tier: <b>${tier.label}</b> — extra-pax supplement (if not same occupancy): <b>AED ${tier.extraPax}</b></div>
     <div class="up-select-row">
       <label>From <select id="upFromSelect"><option value="">Any</option>
         ${upsellRowOptions(tierKey).map((r) => `<option value="${r}" ${r === upsellFrom ? "selected" : ""}>${r}</option>`).join("")}
@@ -827,14 +816,12 @@ function renderUpsell() {
 
   wrap.innerHTML = html;
 
-  $("#upOccInput").addEventListener("input", (e) => { upsellOcc = e.target.value; renderUpsell(); });
-  $("#upNightsCheck").addEventListener("change", (e) => { upsellNights4Plus = e.target.checked; renderUpsell(); });
   $("#upFromSelect").addEventListener("change", (e) => {
     upsellFrom = e.target.value; upsellTo = "";
-    renderUpsell();
+    renderUpsellResults();
   });
   const toSel = $("#upToSelect");
-  if (toSel) toSel.addEventListener("change", (e) => { upsellTo = e.target.value; renderUpsell(); });
+  if (toSel) toSel.addEventListener("change", (e) => { upsellTo = e.target.value; renderUpsellResults(); });
 }
 
 /* ================= Late Checkout ================= */
@@ -847,23 +834,17 @@ const LC_TYPE_TIER = {
 const LC_TIER_RANK = { "Deluxe": 0, "Premium / Family Suite / Interconnecting": 1, "All Suites": 2 };
 
 let lcType = "";
-let lcInterconnecting = false;
 let lcTime = "";
 
 function openLateCheckout() {
-  lcType = ""; lcInterconnecting = false; lcTime = "";
+  lcType = ""; lcTime = "";
   renderLateCheckout();
   $("#lateCheckoutModal").classList.add("show");
 }
 function closeLateCheckout() { $("#lateCheckoutModal").classList.remove("show"); }
 
-function lcEffectiveTier(typeCode, interconnecting) {
-  const baseTier = LC_TYPE_TIER[typeCode];
-  if (!baseTier) return null;
-  if (interconnecting && LC_TIER_RANK["Premium / Family Suite / Interconnecting"] > LC_TIER_RANK[baseTier]) {
-    return "Premium / Family Suite / Interconnecting";
-  }
-  return baseTier;
+function lcEffectiveTier(typeCode) {
+  return LC_TYPE_TIER[typeCode] || null;
 }
 
 function renderLateCheckout() {
@@ -875,20 +856,16 @@ function renderLateCheckout() {
       <label>Room Type <select id="lcTypeSelect"><option value="">Any</option>
         ${typeCodes.map((t) => `<option value="${t}" ${t === lcType ? "selected" : ""}>${t}</option>`).join("")}
       </select></label>
-      <label>Interconnecting <select id="lcIcSelect">
-        <option value="no" ${!lcInterconnecting ? "selected" : ""}>No</option>
-        <option value="yes" ${lcInterconnecting ? "selected" : ""}>Yes</option>
-      </select></label>
       <label>Check Out <select id="lcTimeSelect"><option value="">Any</option>
         ${times.map((t) => `<option value="${t}" ${t === lcTime ? "selected" : ""}>${t}H</option>`).join("")}
       </select></label>
     </div>`;
 
-  const tier = lcType ? lcEffectiveTier(lcType, lcInterconnecting) : null;
+  const tier = lcType ? lcEffectiveTier(lcType) : null;
   const matches = LATE_CHECKOUT_DATA.filter((r) => (!tier || r.category === tier) && (!lcTime || r.time === lcTime));
 
   if (tier) {
-    html += `<div class="up-supplement-note">${lcType} ${lcInterconnecting ? "(interconnecting) " : ""}falls under <b>${tier}</b> pricing.</div>`;
+    html += `<div class="up-supplement-note">${lcType} falls under <b>${tier}</b> pricing.</div>`;
   }
 
   if (tier && lcTime && matches.length === 1) {
@@ -911,7 +888,6 @@ function renderLateCheckout() {
 
   wrap.innerHTML = html;
   $("#lcTypeSelect").addEventListener("change", (e) => { lcType = e.target.value; renderLateCheckout(); });
-  $("#lcIcSelect").addEventListener("change", (e) => { lcInterconnecting = e.target.value === "yes"; renderLateCheckout(); });
   $("#lcTimeSelect").addEventListener("change", (e) => { lcTime = e.target.value; renderLateCheckout(); });
 }
 
@@ -1118,6 +1094,17 @@ function initApp() {
   $("#resortMapBtn").addEventListener("click", openResortMap);
   $("#overviewBtn").addEventListener("click", openOverview);
   $("#upsellBtn").addEventListener("click", openUpsell);
+  $("#upOccInput").addEventListener("input", (e) => {
+    upsellOcc = e.target.value;
+    upsellFrom = ""; upsellTo = "";
+    renderUpsellResults();
+  });
+  $("#upNightsCheck").addEventListener("change", (e) => {
+    upsellNights4Plus = e.target.checked;
+    $("#upOccInput").disabled = upsellNights4Plus;
+    upsellFrom = ""; upsellTo = "";
+    renderUpsellResults();
+  });
   $("#lateCheckoutBtn").addEventListener("click", openLateCheckout);
   $("#resortMapModal").addEventListener("click", (e) => { if (e.target.id === "resortMapModal") closeResortMap(); });
   $("#overviewModal").addEventListener("click", (e) => { if (e.target.id === "overviewModal") closeOverview(); });
