@@ -740,9 +740,9 @@ function openLightbox(src, caption) {
 }
 function closeLightbox() { $("#lightbox").classList.remove("show"); }
 
-/* ================= Coverage dashboard ================= */
 /* ================= Upsell Grid ================= */
-let upsellTier = "t1";
+let upsellOcc = "";
+let upsellNights4Plus = false;
 let upsellFrom = "";
 let upsellTo = "";
 
@@ -750,27 +750,52 @@ function upsellRowOptions(tierKey) {
   return Object.keys(UPSELL_TIERS.find((t) => t.key === tierKey).grid);
 }
 
+function upsellTierFromOccupancy(occ, nights4Plus) {
+  if (nights4Plus) return "t2";
+  if (occ === "" || occ == null || isNaN(occ)) return null;
+  const n = Number(occ);
+  if (n < 50) return "t2";
+  if (n < 70) return "t3";
+  if (n < 85) return "t4";
+  return "t1";
+}
+
 function openUpsell() {
-  upsellFrom = "";
-  upsellTo = "";
+  upsellOcc = ""; upsellNights4Plus = false;
+  upsellFrom = ""; upsellTo = "";
   renderUpsell();
   $("#upsellModal").classList.add("show");
 }
 function closeUpsell() { $("#upsellModal").classList.remove("show"); }
 
 function renderUpsell() {
-  const tier = UPSELL_TIERS.find((t) => t.key === upsellTier);
+  const tierKey = upsellTierFromOccupancy(upsellOcc, upsellNights4Plus);
+  const tier = tierKey ? UPSELL_TIERS.find((t) => t.key === tierKey) : null;
   const wrap = $("#upsellBody");
 
-  let html = `<div class="up-filter-row">`;
-  UPSELL_TIERS.forEach((t) => {
-    html += `<button class="filter-chip up-tier-chip${t.key === upsellTier ? " active" : ""}" data-tier="${t.key}">${t.label}</button>`;
-  });
-  html += `</div>
-    <div class="up-supplement-note">Extra-pax supplement for this occupancy tier (if not same occupancy): <b>AED ${tier.extraPax}</b></div>
+  let html = `
+    <div class="up-occ-row">
+      <label>Occupancy %
+        <input type="number" id="upOccInput" min="0" max="100" placeholder="e.g. 45" value="${upsellOcc}" ${upsellNights4Plus ? "disabled" : ""}>
+      </label>
+      <label class="up-nights-check">
+        <input type="checkbox" id="upNightsCheck" ${upsellNights4Plus ? "checked" : ""}>
+        4+ nights stay
+      </label>
+    </div>`;
+
+  if (!tier) {
+    html += `<div class="up-prompt">Enter an occupancy % (or check "4+ nights stay") to see the matching prices.</div>`;
+    wrap.innerHTML = html;
+    $("#upOccInput").addEventListener("input", (e) => { upsellOcc = e.target.value; renderUpsell(); });
+    $("#upNightsCheck").addEventListener("change", (e) => { upsellNights4Plus = e.target.checked; renderUpsell(); });
+    return;
+  }
+
+  html += `<div class="up-supplement-note">Matched tier: <b>${tier.label}</b> — extra-pax supplement (if not same occupancy): <b>AED ${tier.extraPax}</b></div>
     <div class="up-select-row">
       <label>From <select id="upFromSelect"><option value="">Any</option>
-        ${upsellRowOptions(upsellTier).map((r) => `<option value="${r}" ${r === upsellFrom ? "selected" : ""}>${r}</option>`).join("")}
+        ${upsellRowOptions(tierKey).map((r) => `<option value="${r}" ${r === upsellFrom ? "selected" : ""}>${r}</option>`).join("")}
       </select></label>
       <label>To <select id="upToSelect" ${upsellFrom ? "" : "disabled"}><option value="">Any</option>
         ${upsellFrom ? Object.keys(tier.grid[upsellFrom] || {}).map((c) => `<option value="${c}" ${c === upsellTo ? "selected" : ""}>${c}</option>`).join("") : ""}
@@ -786,7 +811,7 @@ function renderUpsell() {
     });
     html += `</tbody></table>`;
   } else {
-    const rowKeys = upsellRowOptions(upsellTier);
+    const rowKeys = upsellRowOptions(tierKey);
     const colKeys = ["KGAOV","KGE","KGEOV","SKA","SKB","SKC","D2A/D2C","D2B/D2D","SKD","SKP","SXA"];
     html += `<div class="up-grid-scroll"><table class="gloss-table up-full-grid"><thead><tr><th>From \\ To</th>${colKeys.map((c) => `<th>${c}</th>`).join("")}</tr></thead><tbody>`;
     rowKeys.forEach((r) => {
@@ -802,13 +827,8 @@ function renderUpsell() {
 
   wrap.innerHTML = html;
 
-  $$(".up-tier-chip", wrap).forEach((chip) => {
-    chip.addEventListener("click", () => {
-      upsellTier = chip.dataset.tier;
-      upsellFrom = ""; upsellTo = "";
-      renderUpsell();
-    });
-  });
+  $("#upOccInput").addEventListener("input", (e) => { upsellOcc = e.target.value; renderUpsell(); });
+  $("#upNightsCheck").addEventListener("change", (e) => { upsellNights4Plus = e.target.checked; renderUpsell(); });
   $("#upFromSelect").addEventListener("change", (e) => {
     upsellFrom = e.target.value; upsellTo = "";
     renderUpsell();
@@ -851,19 +871,18 @@ function renderLateCheckout() {
   const typeCodes = Object.keys(LC_TYPE_TIER);
   const times = Array.from(new Set(LATE_CHECKOUT_DATA.map((r) => r.time)));
 
-  let html = `<div class="up-filter-row">`;
-  typeCodes.forEach((t) => {
-    html += `<button class="filter-chip lc-type-chip${t === lcType ? " active" : ""}" data-type="${t}">${t}</button>`;
-  });
-  html += `</div>
-    <div class="up-filter-row">
-      <button class="filter-chip lc-ic-chip${lcInterconnecting ? " active" : ""}" id="lcIcChip">Interconnecting room</button>
-    </div>
-    <div class="up-filter-row">`;
-  times.forEach((t) => {
-    html += `<button class="filter-chip lc-time-chip${t === lcTime ? " active" : ""}" data-time="${t}">${t}H</button>`;
-  });
-  html += `</div>`;
+  let html = `<div class="up-select-row">
+      <label>Room Type <select id="lcTypeSelect"><option value="">Any</option>
+        ${typeCodes.map((t) => `<option value="${t}" ${t === lcType ? "selected" : ""}>${t}</option>`).join("")}
+      </select></label>
+      <label>Interconnecting <select id="lcIcSelect">
+        <option value="no" ${!lcInterconnecting ? "selected" : ""}>No</option>
+        <option value="yes" ${lcInterconnecting ? "selected" : ""}>Yes</option>
+      </select></label>
+      <label>Check Out <select id="lcTimeSelect"><option value="">Any</option>
+        ${times.map((t) => `<option value="${t}" ${t === lcTime ? "selected" : ""}>${t}H</option>`).join("")}
+      </select></label>
+    </div>`;
 
   const tier = lcType ? lcEffectiveTier(lcType, lcInterconnecting) : null;
   const matches = LATE_CHECKOUT_DATA.filter((r) => (!tier || r.category === tier) && (!lcTime || r.time === lcTime));
@@ -891,13 +910,9 @@ function renderLateCheckout() {
   }
 
   wrap.innerHTML = html;
-  $$(".lc-type-chip", wrap).forEach((chip) => {
-    chip.addEventListener("click", () => { lcType = chip.dataset.type === lcType ? "" : chip.dataset.type; renderLateCheckout(); });
-  });
-  $("#lcIcChip").addEventListener("click", () => { lcInterconnecting = !lcInterconnecting; renderLateCheckout(); });
-  $$(".lc-time-chip", wrap).forEach((chip) => {
-    chip.addEventListener("click", () => { lcTime = chip.dataset.time === lcTime ? "" : chip.dataset.time; renderLateCheckout(); });
-  });
+  $("#lcTypeSelect").addEventListener("change", (e) => { lcType = e.target.value; renderLateCheckout(); });
+  $("#lcIcSelect").addEventListener("change", (e) => { lcInterconnecting = e.target.value === "yes"; renderLateCheckout(); });
+  $("#lcTimeSelect").addEventListener("change", (e) => { lcTime = e.target.value; renderLateCheckout(); });
 }
 
 /* ================= Search (global, live dropdown) ================= */
